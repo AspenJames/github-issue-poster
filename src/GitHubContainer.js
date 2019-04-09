@@ -17,35 +17,35 @@ class GitHubContainer extends Component {
 
   submitForm = (data) => {
     const url = `https://api.github.com/repos/${data.repo}/issues`;
+
+    // build our body of the request
     const postData = {
-      title: data.issueTitle,
-      body: data.issueBody
+      // let's set this up
     };
 
+    // reset state to clear Results component
     this.setState({
       result: null,
       error: null
     })
     
+    // so fetch
     fetch(url, {
-      method: 'POST',
       headers: {
         'Authorization': `token ${api_key}`,
         'Accept': 'application/vnd.github.v3+json',
         'Content-Type': 'applicaton/json'
       },
-      body: JSON.stringify(postData)
+      body: ''// use postData from above
     }).then(res => res.json())
       .then(json => {
         if (json.body) {
-          let {body, title, html_url} = json;
-          this.setState({
-            result: {body, title, html_url}
-          });
+          // if we posted the issue, set the state for "result"
+          // we need a few pieces of data from the result returned:
+          // issue title, issue body, and html_url
         } else {
-          this.setState({
-            error: "womp womp"
-          });
+          // set the state for "error"
+          // doesn't really matter how for our basic example
         }
       });
   }
