@@ -1,68 +1,47 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# GitHub Issue Poster
 
-## Available Scripts
+## GitHub API 
 
-In the project directory, you can run:
+GitHub provides a couple APIs for programatically interacting with their service. We'll be creating a form to create an issue on an existing repo. 
 
-### `npm start`
+## API Key
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+You'll need to generate an API key in order to be able to make requests to the GitHub API. You can do this in your GitHub settings:
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+- Go to github.com
+- Click on your profile and select "Settings"
+- Select "Developer Settings"
+- Select "Personal Access Token"
+- Click on "Generate New Token"
+- Enter in a description - this can be anything
+- **Be sure to select the "Repo" scope**
+- Put this key in `src/key.js` in the following format: 
 
-### `npm test`
+```js
+export const api_key = 'your API key'
+```
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## API Endpoints
 
-### `npm run build`
+The [GitHub API documentation](https://developer.github.com/v3/) is very detailed, including example requests and responses. 
+We'll be [creating an issue](https://developer.github.com/v3/issues/#create-an-issue) in this exercise, so review the documentation there!
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Our endpoint is almost set up in `src/GitHubContainer.js` - we just need to interpolate the repo that we pull from the form submission. 
+We'll also need to set up the body of our request as per the documentation's specifications to send our issue title and content.
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+## The form
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+We need inputs for the repo, issue title, and issue body. The repo field will accept a string in this format: "github_username/repo"
+Don't worry about validating this, we'll use the error result view to inform the user of proper data. 
 
-### `npm run eject`
+Set up controlled inputs for each of these fields - bonus points for preventing the `fetch` request without each field filled out!
+`IssueForm` receives a callback function called `submitForm` that you can call when you have data you are ready to `fetch`.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Return data
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Make a few practice requests using [Postman](https://www.getpostman.com/downloads/), your browser, or just check the example returns in the documentation.
+We'll want to display one of two things depending on the type of data returned. Our GitHubContainer has state for a `result` or `error` - both of these 
+default to `null`, and are only set when appropriate. They are reset to `null` on each form submission to ensure that only one of these is set at any one time.
+Our `Results` component will conditionally render based on the props it receives, so all you have to worry about is setting the state appropriately. 
+For a successful issue post, we'll need the issue title, body, and `html_url`. For an error, set the error state to anything you'd like.
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify

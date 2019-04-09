@@ -16,7 +16,7 @@ class GitHubContainer extends Component {
   }
 
   submitForm = (data) => {
-    const url = `https://api.github.com/repos/${data.repo}/issues`;
+    const url = `https://api.github.com/repos/${/* repo goes here */}/issues`;
 
     // build our body of the request
     const postData = {
